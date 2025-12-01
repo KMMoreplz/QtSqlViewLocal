@@ -24,6 +24,7 @@ SOURCES += \
     MainWindow.cpp \
     QueryParamDlg.cpp \
     TableHeadersDlg.cpp \
+    connectoptionsdialog.cpp \
     main.cpp \
     simplereportwidget.cpp
 
@@ -32,6 +33,7 @@ HEADERS += \
     MainWindow.h \
     QueryParamDlg.h \
     TableHeadersDlg.h \
+    connectoptionsdialog.h \
     simplereportwidget.h
 
 FORMS += \

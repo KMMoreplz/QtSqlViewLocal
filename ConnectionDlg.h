@@ -27,11 +27,14 @@ private:
     void fetchDbParameter();
     void updateFields(const QString &drv);
 
+    void optionsSetup();
+
 private:
     static QString getDriverDescription(const QString &drv);
 
 public:
     PDbParam dbp;
+    QString localDrv;
 
 private:
     Ui::ConnectionDlg *ui;

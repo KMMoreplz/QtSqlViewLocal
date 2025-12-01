@@ -2,7 +2,7 @@
 #include "ui_ConnectionDlg.h"
 
 #include "dblistmodel.h"
-
+#include "connectoptionsdialog.h"
 #include <QFileDialog>
 
 #include <QMessageBox>
@@ -109,6 +109,8 @@ void ConnectionDlg::setupConnections()
     });
     connect(ui->buttonSelectFile, &QAbstractButton::clicked,
             this, &ConnectionDlg::chooseSqlDbFile);
+    connect(ui->buttonSelectOptions,&QAbstractButton::clicked,
+            this, &ConnectionDlg::optionsSetup);
 }
 
 /******************************************************************/
@@ -136,6 +138,8 @@ void ConnectionDlg::fetchDbParameter()
 
 void ConnectionDlg::updateFields(const QString &drv)
 {
+    ui->editOptions->setText("");
+    localDrv=drv;
     if (drv == "QSQLITE" || drv == "QSQLITE2" || drv == "QMDBTOOLS" ) {
         ui->editHostname->setEnabled(false);
         ui->spinPort->setEnabled(false);
@@ -144,6 +148,8 @@ void ConnectionDlg::updateFields(const QString &drv)
         ui->checkAskPassword->setEnabled(false);
         ui->lblDatabase->setText("Filename");
         ui->buttonSelectFile->setEnabled(true);
+    } else if (drv =="TDS") {
+        ui->buttonSelectOptions->setEnabled(false); //TODO: TDS support?
     } else if (drv == "QODBC" || drv == "QODBC3") {
         ui->editHostname->setEnabled(false);
         ui->spinPort->setEnabled(false);
@@ -161,6 +167,17 @@ void ConnectionDlg::updateFields(const QString &drv)
         ui->buttonSelectFile->setEnabled(false);
         updatePasswordStatus();
     }
+}
+
+void ConnectionDlg::optionsSetup()
+{
+    ConnectOptionsDialog dlg(localDrv,QString());
+    if (dlg.exec() == QDialog::Accepted) {
+            QString newOptions = dlg.getOptionsString();
+            qDebug()<<newOptions;
+            ui->editOptions->setText(newOptions);
+            dbp->connOptions=newOptions;
+        }
 }
 
 /******************************************************************/
